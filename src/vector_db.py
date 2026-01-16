@@ -25,7 +25,16 @@ class WelfareVectorDB:
         )
         self._create_payload_indexs()
 
-    def _create_payload_indexs(self):
+    def hybrid_create_collection(self):
+        self.client.recreate_collection(
+            collection_name=Config.COLLECTION_NAME,
+            vectors_config=models.VectorParams(
+                size=self.vector_dim,
+                distance=models.Distance.COSINE
+            )
+        )    
+
+    def _create_payload_indexs(self): 
         self.client.create_payload_index(Config.COLLECTION_NAME, 
                                          "category", 
                                          models.PayloadSchemaType.KEYWORD
